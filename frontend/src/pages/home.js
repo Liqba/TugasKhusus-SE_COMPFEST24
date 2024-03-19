@@ -50,7 +50,15 @@ const Home = () => {
             <br/>
             <div class="flex items-center justify-center">
             <div className="container" class="p-5 w-1/2 scroll-mx-1 ">
+              <div class="grid grid-cols-2">
+                <div>
+                  
+                  <button onClick={() => logout()} className=' hover:bg-gray-200 text-red-500 p-4 rounded-xl hover:border-white cursor-pointer transition-all duration-500 ease-in-out transform hover:scale-105'>
+                  Logout
+                  </button>
+                </div>
                 <InputDeadline />
+              </div>
                 <div class="flex m-4 justify-center text-4xl font-bold text-gray-700">
                 <h1>
                     Daftar Deadline
@@ -58,9 +66,7 @@ const Home = () => {
                 </div>
                 <ListDeadline />
             </div>
-            <button onClick={() => logout()} className='btn btn-primary'>
-            Logout
-            </button>
+
             </div>
         </Layout>
 

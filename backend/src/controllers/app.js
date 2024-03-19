@@ -3,6 +3,7 @@ const moment = require('moment');
 
 
 exports.getDeadlines = async (req, res) => {
+  console.log(req.session)
     try {
         const allDeadlines = await pool.query("SELECT * FROM deadline");
         res.json(allDeadlines.rows);
@@ -12,6 +13,7 @@ exports.getDeadlines = async (req, res) => {
 }
 
 exports.postDeadlines = async (req, res) => {
+  console.log(req.user)
     try {
         const { title, date, description } = req.body;
 

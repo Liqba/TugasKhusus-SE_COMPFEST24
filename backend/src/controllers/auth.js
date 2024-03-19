@@ -4,6 +4,7 @@ const { sign } = require('jsonwebtoken')
 const { SECRET } = require('../constants')
 
 exports.getUsers = async (req, res) => {
+    console.log(req.user)
   try {
     const { rows } = await db.query('select user_id, username from users')
 
@@ -39,13 +40,19 @@ exports.register = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
+    req.session.userName = req.user.username;
+    req.session.userId = req.user.user_id;
+    req.session.save();
+    console.log(req.session.userName)
+    console.log(req.session.userId)
+    console.log(req.session)
+
   let user = req.user
 
   let payload = {
     id: user.user_id,
     username: user.username,
   }
-
   try {
     const token = await sign(payload, SECRET)
 

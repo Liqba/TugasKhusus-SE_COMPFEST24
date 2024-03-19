@@ -7,7 +7,10 @@ const {
     deleteDeadline,
     convertDate,
 } = require('../controllers/app')
+
+const { userAuth } = require('../middlewares/auth-middleware')
 const router = Router()
+
  
 router.post('/deadlines', postDeadlines)
 router.get('/deadlines', getDeadlines)
