@@ -1,27 +1,62 @@
 // Login.js
-import React, { useState } from 'react';
+import { useState } from 'react';
+import Layout  from '../components/Layout';
+import { Link } from 'react-router-dom';
+import { onLogin } from '../api/auth';
+import { useDispatch } from 'react-redux';
+import { authenticateUser } from '../redux/slices/authSlice';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [values, setValues] = useState({
+    username: '',
+    password: '',
+  })
+
+  const [error, setError] = useState(false)
+
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value })
+  }
+
+  const dispatch = useDispatch()
 
   const handleSubmit = async e => {
-    e.preventDefault();
-    const response = await fetch('http://localhost:3001/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    const data = await response.json();
-    // Handle response here
+    e.preventDefault()
+
+    try {
+      await onLogin(values)
+      dispatch(authenticateUser())
+
+      localStorage.setItem('isAuth', 'true')
+    } catch (error) {
+      console.log(error.response.data.errors[0].msg)
+      setError(error.response.data.errors[0].msg)
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder="Username" required />
-      <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
+    <Layout>
+      <div class="flex min-h-screen w-full items-center justify-center ">
+        <div class="rounded-lg px-8 py-6 w-2/6 bg-white shadow-md">
+        <h1 class="text-2xl font-bold text-center mb-4">Login</h1>
+          <form onSubmit={handleSubmit}>
+            <div class="mb-4">
+              <label for="username" class="block text-sm font-medium text-black mb-2">Username</label>
+              <input type="text" onChange={(e) => onChange(e)} name="username" id="username" class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="username" required/>
+            </div>
+            <div class="">
+              <label for="password" class="block text-sm font-medium text-black mb-2">Password</label>
+              <input type="password" onChange={(e) => onChange(e)} name="password" id="password" class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your password" required/>
+            </div>
+            <Link to="/register"
+            class="flex mb-4 text-xs text-indigo-500 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 justify-end">Create
+            Account</Link>
+            <div style={{ color: 'red', margin: '10px 0' }}>{error}</div>
+            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-shamrockg hover:bg-dceladon focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dceladon">Login</button>
+          </form>
+        </div>
+      </div>
+    </Layout>
   );
 };
 
