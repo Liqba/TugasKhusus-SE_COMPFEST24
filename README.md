@@ -38,4 +38,4 @@ Masuk ke directory frontend `cd frontend`, kemudian jalankan perintah:
 5.	**Membuka website**
 
 Website dapat diakses pada browser melalui url berikut:
-http://localhost:3001/
+http://localhost:3000/
