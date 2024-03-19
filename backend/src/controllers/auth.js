@@ -5,7 +5,7 @@ const { SECRET } = require('../constants')
 
 exports.getUsers = async (req, res) => {
   try {
-    const { rows } = await db.query('select user_id, email from users')
+    const { rows } = await db.query('select user_id, username from users')
 
     return res.status(200).json({
       success: true,
@@ -17,12 +17,12 @@ exports.getUsers = async (req, res) => {
 }
 
 exports.register = async (req, res) => {
-  const { email, password } = req.body
+  const { username, password } = req.body
   try {
     const hashedPassword = await hash(password, 10)
 
-    await db.query('insert into users(email,password) values ($1 , $2)', [
-      email,
+    await db.query('insert into users(username,password) values ($1 , $2)', [
+      username,
       hashedPassword,
     ])
 
@@ -43,7 +43,7 @@ exports.login = async (req, res) => {
 
   let payload = {
     id: user.user_id,
-    email: user.email,
+    username: user.username,
   }
 
   try {
